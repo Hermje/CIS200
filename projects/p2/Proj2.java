@@ -43,39 +43,111 @@ public class Proj2 {
       System.out.println(hand[i][0] + " of " + hand[i][1]);
     }
 
-    //temp string used for storing result of matching operation below
-    String pair = "";
+    // //temp string used for storing result of matching operation below
+    // String pair = "";
+    //
+    // //find pairs
+    // for(int i = 0; i < 5; i++) {
+    //   // temp string array to store all data of a card: {face name, suit name, numerical value}
+    //   String[] card1 = hand[i];
+    //   // increments every time match is found, it will compare the card to itself so one match is not enough
+    //   int matches = 0;
+    //
+    //   //compares every other card to the one selected above
+    //   for(int j = 0; j < 5; j++) {
+    //     String[] card = hand[j];
+    //     //using .equals to compare because == with String doesn't compare their actual value
+    //     if(card1[0].equals(card2[0])) {
+    //       //increment matches if test passes
+    //       matches++;
+    //       //set pair equal to that card for output purposes
+    //       pair = card1[0];
+    //     }
+    //
+    //   }
+    //   //greater than one because it could just compare to itself
+    //   if(matches > 1) {
+    //     //possibility of a two pair or three of a kind
+    //     System.out.printf("you have a pair of %s's \n", pair);
+    //     //not worried about anymore pairs at the moment so we can stop
+    //     break;
+    //   }
+    //
+    //   if(i==4) {
+    // 	  //every card has been compared at this point
+    //     System.out.println("you have no pairs");
+    //   }
+    // }
 
-    //find pairs
-    for(int i = 0; i < 5; i++) {
-      // temp string array to store all data of a card: {face name, suit name, numerical value}
-      String[] card1 = hand[i];
-      // increments every time match is found, it will compare the card to itself so one match is not enough
-      int matches = 0;
+    //better pair finding algorithm
 
-      //compares every other card to the one selected above
-      for(int j = 0; j < 5; j++) {
-        String[] card2 = hand[j];
-        //using .equals to compare because == with String doesn't compare their actual value
-        if(card1[0].equals(card2[0])) {
-          //increment matches if test passes
-          matches++;
-          //set pair equal to that card for output purposes
-          pair = card1[0];
+    //similar to hand {face name, suit name, numerical value, amount in hand}
+    String[][] handNoDuplicates = new String[5][4];
+    String[] previousCard = {"", "", ""};
+
+    int passes = 0;
+    int appends = 0;
+
+    for (String[] card1 : hand)
+    {
+      for(String[] card2 : hand)
+      {
+        if(!card1[2].equals(card2[2]))
+        {
+          passes++;
         }
-
-      }
-      //greater than one because it could just compare to itself
-      if(matches > 1) {
-        System.out.printf("you have a pair of %s's \n", pair);
-        //not worried about anymore pairs at the moment so we can stop
-        break;
       }
 
-      if(i==4) {
-    	  //every card has been compared at this point
-        System.out.println("you have no pairs");
+      if(passes >= 4)
+      {
+        handNoDuplicates[appends][0] = card1[0];
+        handNoDuplicates[appends][1] = card1[1];
+        handNoDuplicates[appends][2] = card1[2];
+        handNoDuplicates[appends][3] = "0";
+        appends++;
+      } else {
+        //this card has a pair so match it to one in handNoDuplicates and increment column 3
+        for(String[] card : handNoDuplicates)
+        {
+          if(card1[0].equals(card[0]))
+          {
+            card[3] = String.valueOf(Integer.parseInt(card[3]) + 1);
+          }
+        }
       }
+
+      passes = 0;
+    }
+
+    int pairs = 0;
+
+    //look for pairs/three of a kind and output
+    for(String[] card : handNoDuplicates)
+    {
+      int cardCount = Integer.parseInt(card[3]);
+
+      if(cardCount > 0)
+      {
+        if(cardCount > 1)
+        {
+          //three of a kind
+          System.out.println("You have three " + card[0] + "'s");
+        } else {
+          //just a pair
+          System.out.println("You have a pair of " + card[0] + "'s");
+          pairs++;
+        }
+      }
+    }
+
+    if(pairs > 1)
+    {
+      System.out.println("that's a two pair! nice!");
+    }
+
+    if(pairs == 0)
+    {
+      System.out.println("You have no pairs");
     }
 
     //temp string, just picks the top card to start comparison
