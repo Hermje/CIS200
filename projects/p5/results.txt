@@ -1,0 +1,12 @@
+null
+a
+b
+c
+d
+e
+
+
+
+Input file contained a total of 76 characters
+Input file contained a total of 12 lines
+Input file contained 1.3333333333333333 words per line on average
